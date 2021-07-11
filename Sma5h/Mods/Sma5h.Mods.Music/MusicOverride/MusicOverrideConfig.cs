@@ -7,7 +7,7 @@ namespace Sma5h.Mods.Music.MusicOverride
 {
     public class MusicOverrideConfig
     {
-        public Dictionary<string, short> SoundTestOrder { get; set; }
+        public SoundTestOrder SoundTestOrder { get; set; }
         public Dictionary<string, PlaylistConfig> PlaylistsOverrides { get; set; }
         public Dictionary<string, StageConfig> StageOverrides { get; set; }
         public Dictionary<string, GameConfig> CoreGameOverrides { get; set; }
@@ -15,7 +15,7 @@ namespace Sma5h.Mods.Music.MusicOverride
 
         public MusicOverrideConfig()
         {
-            SoundTestOrder = new Dictionary<string, short>();
+            SoundTestOrder = new SoundTestOrder();
             PlaylistsOverrides = new Dictionary<string, PlaylistConfig>();
             StageOverrides = new Dictionary<string, StageConfig>();
             CoreGameOverrides = new Dictionary<string, GameConfig>();
@@ -41,6 +41,40 @@ namespace Sma5h.Mods.Music.MusicOverride
                 CoreBgmStreamPropertyOverrides = new Dictionary<string, BgmStreamPropertyConfig>();
                 CoreBgmPropertyOverrides = new Dictionary<string, BgmPropertyEntryConfig>();
             }
+        }
+
+        public class SoundTestOrder
+        {
+            [JsonProperty("version")]
+            public int Version { get; set; }
+
+            [JsonProperty("entries")]
+            public List<SoundTestOrderEntry> Entries { get; set; }
+        }
+
+        public class SoundTestOrderEntry
+        {
+            [JsonProperty("id")]
+            public string Id { get; set; }
+        }
+
+        public class SoundTestOrderFolder: SoundTestOrderEntry
+        {
+            [JsonProperty("entries")]
+            public List<SoundTestOrderEntry> Entries { get; set; }
+
+            [JsonProperty("default_ui_series")]
+            public List<string> DefaultUiSeries { get; set; }
+
+            [JsonProperty("default_ui_gametitle")]
+            public List<string> DefaultUiGameTitle { get; set; }
+
+            [JsonProperty("default_mod")]
+            public List<string> DefaultUiMod { get; set; }
+        }
+
+        public class SoundTestOrderBgm : SoundTestOrderEntry
+        {
         }
 
         public class PlaylistConfig

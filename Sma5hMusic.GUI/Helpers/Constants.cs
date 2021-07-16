@@ -4,7 +4,8 @@ namespace Sma5hMusic.GUI.Helpers
 {
     public static class Constants
     {
-        public const double GUIVersion = 1.52;
+        public const double GUIVersion = 1.53;
+        public const bool IsStable = false;
 
         public const float DefaultVolume = 0.8f;
         public const float MinimumGameVolume = -20.0f;
@@ -14,6 +15,7 @@ namespace Sma5hMusic.GUI.Helpers
         {
             public const string DATAOBJECT_FORMAT_BGM = "BGM";
             public const string DATAOBJECT_FORMAT_TREEVIEW = "TREEVIEW";
+            public const string DATAOBJECT_FORMAT_PLAYLIST = "PLAYLIST";
         }
         public class SpecialCategories
         {
@@ -155,10 +157,10 @@ namespace Sma5hMusic.GUI.Helpers
 
         public readonly static Dictionary<string, string> CONVERTER_CORE_STAGES = new Dictionary<string, string>()
         {
-            {"ui_stage_random","Random"},
-            {"ui_stage_random_normal","Random"},
-            {"ui_stage_random_battle_field","Random Battlefield"},
-            {"ui_stage_random_end","Random Ω Form"},
+            {"ui_stage_random","(H) Random"},
+            {"ui_stage_random_normal","(H) Random Normal"},
+            {"ui_stage_random_battle_field","(H) Random Battlefield"},
+            {"ui_stage_random_end","(H) Random Ω Form"},
             {"ui_stage_battle_field","Battlefield"},
             {"ui_stage_battle_field_l","Big Battlefield"},
             {"ui_stage_end","Final Destination"},
@@ -245,8 +247,7 @@ namespace Sma5hMusic.GUI.Helpers
             {"ui_stage_pikmin_garden","Garden of Hope"},
             {"ui_stage_animal_city","Town and City"},
             {"ui_stage_wiifit","Wii Fit Studio"},
-            {"ui_stage_punchoutsb","ui_stage_punchoutsb"},
-            {"ui_stage_punchoutw","ui_stage_punchoutw"},
+            {"ui_stage_punchoutsb","Boxing Ring"},
             {"ui_stage_xeno_gaur","Gaur Plain"},
             {"ui_stage_duckhunt","Duck Hunt"},
             {"ui_stage_wreckingcrew","Wrecking Crew"},
@@ -263,23 +264,24 @@ namespace Sma5hMusic.GUI.Helpers
             {"ui_stage_zelda_tower","Great Plateau Tower"},
             {"ui_stage_spla_parking","Moray Towers"},
             {"ui_stage_dracula_castle","Dracula's Castle"},
-            {"ui_stage_bonus_game","ui_stage_bonus_game"},
-            {"ui_stage_training","ui_stage_training"},
-            {"ui_stage_general_all","ui_stage_general_all"},
-            {"ui_stage_setting_stage","ui_stage_setting_stage"},
-            {"ui_stage_sham_fight","ui_stage_sham_fight"},
-            {"ui_stage_campaign_map","ui_stage_campaign_map"},
-            {"ui_stage_menu_music","ui_stage_menu_music"},
-            {"ui_stage_boss_ganon","ui_stage_boss_ganon"},
-            {"ui_stage_boss_rathalos","ui_stage_boss_rathalos"},
-            {"ui_stage_boss_marx","ui_stage_boss_marx"},
-            {"ui_stage_boss_dracula","ui_stage_boss_dracula"},
-            {"ui_stage_boss_galleom","ui_stage_boss_galleom"},
-            {"ui_stage_boss_final","ui_stage_boss_final"},
-            {"ui_stage_boss_final2","ui_stage_boss_final2"},
-            {"ui_stage_boss_final3","ui_stage_boss_final3"},
-            {"ui_stage_edit","ui_stage_edit"},
-            {"ui_stage_homerun","ui_stage_homerun"},
+            {"ui_stage_bonus_game","(H) Bonus Game"},
+            {"ui_stage_training","(H) Stage Training"},
+            {"ui_stage_general_all","(H) General All"},
+            {"ui_stage_setting_stage","(H) Setting Stage"},
+            {"ui_stage_sham_fight","(H) Sham Fight"},
+            {"ui_stage_campaign_map","(H) Campaign Map"},
+            {"ui_stage_menu_music","(H) Menu Music"},
+            {"ui_stage_boss_ganon","(H) Boss Ganon"},
+            {"ui_stage_boss_rathalos","(H) Boss Rathalos"},
+            {"ui_stage_boss_marx","(H) Boss Marx"},
+            {"ui_stage_boss_dracula","(H) Boss Dracula"},
+            {"ui_stage_boss_galleom","(H) Boss Galleom"},
+            {"ui_stage_boss_final","(H) Boss Final"},
+            {"ui_stage_boss_final2","(H) Boss Final 2"},
+            {"ui_stage_boss_final3","(H) Boss Final 3"},
+            {"ui_stage_punchoutw","(H) Boxing Ring"},
+            {"ui_stage_edit","(H) Stage Edit"},
+            {"ui_stage_homerun","(H) Home Run"},
             {"ui_stage_jack_mementoes","Mementos"},
             {"ui_stage_brave_altar","Yggdrasil's Altar"},
             {"ui_stage_buddy_spiral","Spiral Mountain"},

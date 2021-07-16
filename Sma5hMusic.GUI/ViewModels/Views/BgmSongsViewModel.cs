@@ -32,6 +32,9 @@ namespace Sma5hMusic.GUI.ViewModels
 
         public ContextMenuViewModel VMContextMenu { get; }
 
+        [Reactive]
+        public string Debug { get; set; }
+
         public IObservable<BgmDbRootEntryViewModel> WhenNewRequestToEditBgmEntry { get { return _whenNewRequestToEditBgmEntry; } }
         public IObservable<BgmDbRootEntryViewModel> WhenNewRequestToDeleteBgmEntry { get { return _whenNewRequestToDeleteBgmEntry; } }
         public IObservable<BgmDbRootEntryViewModel> WhenNewRequestToRenameToneId { get { return _whenNewRequestToRenameToneId; } }
@@ -118,20 +121,21 @@ namespace Sma5hMusic.GUI.ViewModels
             if (e.Column.DisplayIndex != 0)
                 return;
 
-            var source = e.Row as IControl;
-            while (!(source is DataGrid) && source != null)
-                source = source.Parent;
-            var dataGrid = source as DataGrid;
-
-            var dragData = new DataObject();
+            var dataGrid = VisualTreeHelper.GetControlParent<DataGrid>(e.Row);
             if (e.Cell.DataContext is BgmDbRootEntryViewModel sourceObj)
             {
+                var dragData = new DataObject();
                 var syncCheck = dataGrid.SelectedItems.Contains(sourceObj);
 
-                if (dataGrid.SelectedItems.Count == 1 || !syncCheck)
+                var leftClick = VisualTreeHelper.IsLeftButtonClicked(dataGrid, e.PointerPressedEventArgs);
+                if (dataGrid.SelectedItems.Count == 1 || !syncCheck || leftClick)
                 {
                     dragData.Set(Constants.DragAndDropDataFormats.DATAOBJECT_FORMAT_BGM, new List<BgmDbRootEntryViewModel>() { sourceObj });
+                    VisualTreeHelper.AddClassStyle<DataGrid>(dataGrid, VisualTreeHelper.STYLES_CLASS_IS_DRAGGING);
+                    VMBgmProperties.AddTreeDragDrop();
                     await DragDrop.DoDragDrop(e.PointerPressedEventArgs, dragData, DragDropEffects.Move);
+                    VisualTreeHelper.RemoveClassStyle<DataGrid>(dataGrid, VisualTreeHelper.STYLES_CLASS_IS_DRAGGING);
+                    VMBgmProperties.RemoveTreeDragDrop();
                 }
                 else if (dataGrid.SelectedItems.Count > 1)
                 {
@@ -144,7 +148,11 @@ namespace Sma5hMusic.GUI.ViewModels
                     if (items.Count > 0)
                     {
                         dragData.Set(Constants.DragAndDropDataFormats.DATAOBJECT_FORMAT_BGM, items);
+                        VisualTreeHelper.AddClassStyle<DataGrid>(dataGrid, VisualTreeHelper.STYLES_CLASS_IS_DRAGGING);
+                        VMBgmProperties.AddTreeDragDrop();
                         await DragDrop.DoDragDrop(e.PointerPressedEventArgs, dragData, DragDropEffects.Move);
+                        VisualTreeHelper.RemoveClassStyle<DataGrid>(dataGrid, VisualTreeHelper.STYLES_CLASS_IS_DRAGGING);
+                        VMBgmProperties.RemoveTreeDragDrop();
                     }
                 }
             }
@@ -162,14 +170,11 @@ namespace Sma5hMusic.GUI.ViewModels
 
         public void Drop(object sender, DragEventArgs e)
         {
-            var source = e.Source;
-            while (!(source is DataGrid) && source != null)
-            {
-                source = source.InteractiveParent;
-            }
-            if (source == null)
+            var dataGrid = VisualTreeHelper.GetControlParent<DataGrid>(e.Source);
+            VisualTreeHelper.RemoveClassStyle<DataGrid>(dataGrid, VisualTreeHelper.STYLES_CLASS_IS_DRAGGING);
+            var dataGridRow = VisualTreeHelper.GetControlParent<DataGridRow>(e.Source);
+            if (dataGrid == null || dataGridRow == null)
                 return;
-            var dataGrid = (DataGrid)source;
 
             if (((Control)e.Source).DataContext is BgmDbRootEntryViewModel destinationObj)
             {
@@ -179,10 +184,9 @@ namespace Sma5hMusic.GUI.ViewModels
                     if (selectedItems[0] != destinationObj)
                     {
                         var position = destinationObj.TestDispOrder;
-                        if (selectedItems[0].TestDispOrder < position)
-                            position += (short)(selectedItems.Count - 1);
-                        if (position < 0)
-                            position = 0;
+                        var point = e.GetPosition(dataGridRow);
+                        if (point.Y >= dataGridRow.Bounds.Height / 2)
+                            position += 1;
 
                         _whenNewRequestToReorderBgmEntry.OnNext(new Tuple<IEnumerable<string>, short>(selectedItems.Select(p => p.UiBgmId), position));
                         _postReorderSelection = () =>
